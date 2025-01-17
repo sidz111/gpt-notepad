@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Advanced Notepad</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Montserrat:wght@300;400;700&family=Poppins:wght@300;400;700&family=Playfair+Display:wght@400;700&family=Ubuntu:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      body {
+        font-family: "Roboto", sans-serif;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #f3f3f3, #dcdcdc);
+        color: #333;
+      }
+      .notepad-container {
+        width: 90%;
+        max-width: 800px;
+        background: #fff;
+        border-radius: 10px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+      .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        align-items: center;
+        background: #007bff;
+        padding: 10px;
+        border-radius: 6px;
+      }
+      .toolbar button,
+      .toolbar select,
+      .toolbar input[type="color"] {
+        background-color: white;
+        color: #007bff;
+        border: none;
+        padding: 8px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        margin: 5px;
+      }
+      .toolbar button:hover,
+      .toolbar select:hover {
+        background-color: #0056b3;
+        color: white;
+      }
+      #notepad {
+        width: 100%;
+        min-height: 300px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        background-color: #fafafa;
+        font-size: 16px;
+        line-height: 1.6;
+        outline: none;
+        resize: vertical;
+        transition: all 0.3s ease;
+      }
+      .save-button {
+        margin-top: 15px;
+        background-color: #28a745;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        align-self: center;
+      }
+      .save-button:hover {
+        background-color: #218838;
+      }
+      .theme-dark {
+        background: #2c3e50;
+        color: #ecf0f1;
+      }
+      .theme-dark #notepad {
+        background-color: #34495e;
+        color: white;
+      }
+      .theme-dark .toolbar {
+        background: #1a3e68;
+      }
+      .theme-dark .save-button {
+        background-color: #e67e22;
+      }
+      .theme-dark .save-button:hover {
+        background-color: #d35400;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="notepad-container">
+      <div class="toolbar">
+        <button onclick="document.execCommand('bold')"><b>B</b></button>
+        <button onclick="document.execCommand('italic')"><i>I</i></button>
+        <button onclick="document.execCommand('underline')"><u>U</u></button>
+        <select onchange="changeFontFamily(this.value)">
+          <option value="Arial">Arial</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Courier New">Courier New</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Lato">Lato</option>
+          <option value="Montserrat">Montserrat</option>
+          <option value="Poppins">Poppins</option>
+          <option value="Playfair Display">Playfair Display</option>
+          <option value="Ubuntu">Ubuntu</option>
+        </select>
+        <select onchange="changeFontSize(this.value)">
+          <option value="16px">16px</option>
+          <option value="18px">18px</option>
+          <option value="20px">20px</option>
+          <option value="22px">22px</option>
+        </select>
+        <input
+          type="color"
+          id="colorPicker"
+          onchange="changeTextColor(this.value)"
+          title="Choose Text Color"
+        />
+        <button onclick="toggleTheme()">🌙 Dark Mode</button>
+      </div>
+      <div id="notepad" contenteditable="true">Start writing here...</div>
+      <button class="save-button" onclick="saveText()">Save Note</button>
+    </div>
+    <script>
+      function saveText() {
+        const text = document.getElementById("notepad").innerHTML;
+        const blob = new Blob([text], { type: "text/html" });
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = "note.html";
+        link.click();
+      }
+      function changeFontFamily(font) {
+        document.getElementById("notepad").style.fontFamily = font;
+      }
+      function changeFontSize(size) {
+        document.getElementById("notepad").style.fontSize = size;
+      }
+      function changeTextColor(color) {
+        document.execCommand("foreColor", false, color);
+      }
+      function toggleTheme() {
+        document.body.classList.toggle("theme-dark");
+      }
+    </script>
+  </body>
+</html>
